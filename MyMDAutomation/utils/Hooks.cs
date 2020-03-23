@@ -48,9 +48,11 @@ namespace MyMDAutomation.utils
             extentReport = new ExtentReports();*/
             extentReport = new AventStack.ExtentReports.ExtentReports();
             extentReport.AttachReporter(htmlReporter);
+            string b = Environment.GetEnvironmentVariable("browser", EnvironmentVariableTarget.Process);
+            string e = Environment.GetEnvironmentVariable("environment", EnvironmentVariableTarget.Process);
             extentReport.AddSystemInfo("OS", "Windows10");
-            extentReport.AddSystemInfo("Environment", "15's");
-            extentReport.AddSystemInfo("Browser Mode", "Desktop");
+            extentReport.AddSystemInfo("Environment", e);
+            extentReport.AddSystemInfo("Browser", b);
         }
 
 
@@ -129,14 +131,15 @@ namespace MyMDAutomation.utils
         [AfterScenario]
         public void closeBrowser()
         {
-            string bType = Environment.GetEnvironmentVariable("browser", EnvironmentVariableTarget.Process);
-            if (bType != "headless")
-            {
-                screenShot();
-            }
+            //string bType = Environment.GetEnvironmentVariable("browser", EnvironmentVariableTarget.Process);
+            //if (bType != "headless")
+            //{
+            //    screenShot();
+            //}
+            screenShot();
             if (MD.MDdriver != null)
                 MD.MDdriver.Close();
-                MD.MDdriver.Quit();
+            MD.MDdriver.Quit();
         }
     }
 }

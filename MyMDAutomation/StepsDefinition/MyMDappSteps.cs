@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -26,7 +27,7 @@ namespace MyMDAutomation.StepsDefinition
             {
                 try
                 {
-                    MD.click("signout_id"); 
+                    MD.click("signout_id");
                 }
                 catch
                 {
@@ -38,6 +39,22 @@ namespace MyMDAutomation.StepsDefinition
                 MD.click("signoutp_id");
             }
             MD.verifyText("successmsg_xpath", "Thank you for using My MD. You have successfully logged out.");
+        }
+
+        [Then(@"I try for element \""(.*)"" and will click if available")]
+        [When(@"I try for element \""(.*)"" and will click if available")]
+        public void TryElement(string locator)
+        {
+            Console.WriteLine("Try for element " + locator + " and will click if available");
+            Thread.Sleep(3000);
+            try
+            {
+                MD.click(locator);
+            }
+            catch
+            {
+                Console.WriteLine("The above element " + locator + " is not available");
+            }
         }
     }
 }

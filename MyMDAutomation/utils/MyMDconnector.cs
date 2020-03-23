@@ -28,7 +28,7 @@ namespace MyMDAutomation
         //Declaring IWebDriver as MDdriver 
         public IWebDriver MDdriver = null;
         private readonly IObjectContainer _objectContainer;
-        WebDriverWait wait;
+        public static WebDriverWait wait;
 
         //Creating the constructor for objectContainer
         public MyMDconnector(IObjectContainer objectContainer)
@@ -55,6 +55,7 @@ namespace MyMDAutomation
             {
                 case "chrome":
                     options.AddAdditionalCapability("useAutomationExtension", false);
+                    options.AddArguments("window-size=1920,1080");
                     MDdriver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), options);
                     MDdriver.Manage().Window.Maximize();
                     break;
@@ -67,13 +68,13 @@ namespace MyMDAutomation
                     FirefoxDriverService FFservice = FirefoxDriverService.CreateDefaultService(filePath);
                     ffoptions.AcceptInsecureCertificates = true;
                     MDdriver = new FirefoxDriver(FFservice, ffoptions);
-                    MDdriver.Manage().Window.Maximize();
                     break;
 
                 case "headless":
                     options.AddArguments("headless");
                     options.AddAdditionalCapability("useAutomationExtension", false);
-                    options.AddArguments("window-size=1280,1024");
+                    options.AddArguments("window-size=1920,1080");
+                    //options.AddArguments("window-size=1280,1024");
                     MDdriver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), options);
                     break;
 
@@ -96,14 +97,16 @@ namespace MyMDAutomation
 
                 default:
                     options.AddAdditionalCapability("useAutomationExtension", false);
+                    options.AddArguments("window-size=1920,1080");
                     MDdriver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), options);
-                    MDdriver.Manage().Window.Maximize();
+                    //MDdriver.Manage().Window.Maximize();
                     break;
             }
             _objectContainer.RegisterInstanceAs<IWebDriver>(MDdriver);
             MDdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             wait = new WebDriverWait(MDdriver, TimeSpan.FromSeconds(30));
         }
+
         /// <summary>
         /// Returns the WebDriver as MDdriver
         /// </summary>
@@ -119,62 +122,38 @@ namespace MyMDAutomation
         /// <param name="urlKey"></param>
         public void navigate(string urlKey)
         {
-            try
+            Console.WriteLine("Navigating to MyMD ");
+            urlKey = Environment.GetEnvironmentVariable("environment", EnvironmentVariableTarget.Process);
+            //urlKey = "sprint";
+            switch (urlKey)
             {
-                if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("sprint"))
-                {
+                case "sprint":
                     MDdriver.Url = "https://sprint.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("redesign"))
-                {
-                    MDdriver.Url = "https://sprint.mdm.ca/mymd";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("redesign15"))
-                {
-                    MDdriver.Url = "https://cgsecure3.mdm.ca/mymd";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("onlinedev"))
-                {
-                    MDdriver.Url = "https://onlinedev.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("onlineuat"))
-                {
-                    MDdriver.Url = "https://onlineuat.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("staging"))
-                {
-                    MDdriver.Url = "https://sprint-staging.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("onlineprototype"))
-                {
-                    MDdriver.Url = "https://onlineprototype.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("15s"))
-                {
+                    break;
+
+                case "15s":
                     MDdriver.Url = "https://cgsecure3.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("online15"))
-                {
-                    MDdriver.Url = "https://online15.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("12s"))
-                {
+                    break;
+
+                case "staging":
+                    MDdriver.Url = "https://sprint-staging.mdm.ca";
+                    break;
+
+                case "12s":
                     MDdriver.Url = "https://cgexternal1.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("14s"))
-                {
+                    break;
+
+                case "14s":
                     MDdriver.Url = "https://cgexternal2.mdm.ca";
-                }
-                else if (ConfigurationManager.AppSettings[urlKey].ToLower().Equals("menudev"))
-                {
-                    MDdriver.Url = "https://menu-dev.mdm.ca";
-                }
-            }
-            catch (Exception)
-            {
-                Assert.Fail("This URL is not available or wrong URL is provided " + ConfigurationManager.AppSettings[urlKey].ToLower());
-                //test.Log(Status.Fail, "This URL is not available or wrong URL is provided " + ConfigurationManager.AppSettings[urlKey].ToLower());
-                Console.WriteLine("This URL is not available or wrong URL is provided " + ConfigurationManager.AppSettings[urlKey].ToLower());
+                    break;
+
+                case "prod":
+                    MDdriver.Url = "https://mdm.ca/";
+                    break;
+
+                default:
+                    MDdriver.Url = "https://cgsecure3.mdm.ca";
+                    break;
             }
         }
 
@@ -216,7 +195,6 @@ namespace MyMDAutomation
                 {
                     MDelement = MDdriver.FindElement(By.PartialLinkText(ConfigurationManager.AppSettings[locatorKey]));
                 }
-
             }
             catch (Exception)
             {
@@ -238,9 +216,21 @@ namespace MyMDAutomation
             //test.Log(Status.Info, "Typing in " + ConfigurationManager.AppSettings[locatorKey]);
             IWebElement MDelement = MDlocator(locatorKey);
             waitForElement(locatorKey);
-            MDelement.Click();
-            MDelement.Clear();
-            MDelement.SendKeys(testdata);
+            Thread.Sleep(2000);
+            try
+            {
+                MDelement.Click();
+                MDelement.Clear();
+                MDelement.SendKeys(testdata);
+            }
+            catch
+            {
+                IWebElement foreseeX = MDlocator("fsX_id");
+                foreseeX.Click();
+                MDelement.Click();
+                MDelement.Clear();
+                MDelement.SendKeys(testdata);
+            }
         }
 
         /// <summary>
@@ -253,7 +243,17 @@ namespace MyMDAutomation
             //test.Log(Status.Info, "Clicking the " + ConfigurationManager.AppSettings[locatorKey]);
             IWebElement MDelement = MDlocator(locatorKey);
             waitForElement(locatorKey);
-            MDelement.Click();
+            Thread.Sleep(5000);
+            try
+            {
+                MDelement.Click();
+            }
+            catch
+            {
+                IWebElement foreseeX = MDlocator("fsX_id");
+                foreseeX.Click();
+                MDelement.Click();
+            }
         }
 
         /// <summary>
@@ -277,7 +277,8 @@ namespace MyMDAutomation
         /// <param name="locatorKey"></param>
         public void waitForElement(string locatorKey)
         {
-            wait = new WebDriverWait(MDdriver, TimeSpan.FromSeconds(30));
+            wait = new WebDriverWait(MDdriver, TimeSpan.FromSeconds(120));
+            wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
             if (locatorKey.EndsWith("_id"))
             {
                 wait.Until(ExpectedConditions.ElementIsVisible(By.Id(ConfigurationManager.AppSettings[locatorKey])));
@@ -326,7 +327,7 @@ namespace MyMDAutomation
             Console.WriteLine("Clicking on SignIn button from either Redesign Menu or old Mega Menu");
             try
             {
-                click("SignInheader_classname"); 
+                click("SignInheader_classname");
             }
             catch
             {
@@ -357,6 +358,15 @@ namespace MyMDAutomation
             catch
             {
                 waitForElement("externalweb_classname");
+            }
+            Console.WriteLine("Try to Click the not interested button if splash page available");
+            try
+            {
+                click("notinterested_id");
+            }
+            catch
+            {
+                Console.WriteLine("Splash page is not available for this user ");
             }
         }
 
@@ -389,7 +399,7 @@ namespace MyMDAutomation
             {
                 if (locatorKey.EndsWith("_id"))
                 {
-                     MDelement = MDdriver.FindElements(By.Id(ConfigurationManager.AppSettings[locatorKey]));
+                    MDelement = MDdriver.FindElements(By.Id(ConfigurationManager.AppSettings[locatorKey]));
                 }
                 else if (locatorKey.EndsWith("_xpath"))
                 {
@@ -432,20 +442,97 @@ namespace MyMDAutomation
         /// <param name="Tab"> is the first or last</param>
         public void switchTab(string TabNo)
         {
-              if (TabNo.ToLower().Equals("first"))
-               {
-                  MDdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                  MDdriver.SwitchTo().Window(MDdriver.WindowHandles.First());
-               }
-               else if (TabNo.ToLower().Equals("last"))
-               {
-                  MDdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                  MDdriver.SwitchTo().Window(MDdriver.WindowHandles.Last());
-               }
-               else if (TabNo.ToLower() != "first" || TabNo.ToLower() != "last")
-               {
-                  Assert.Fail("Failed in swithcing the Tab/Window with provided Window Name " + TabNo);
-               }
+            if (TabNo.ToLower().Equals("first"))
+            {
+                MDdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                MDdriver.SwitchTo().Window(MDdriver.WindowHandles.First());
+            }
+            else if (TabNo.ToLower().Equals("last"))
+            {
+                MDdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                MDdriver.SwitchTo().Window(MDdriver.WindowHandles.Last());
+            }
+            else if (TabNo.ToLower() != "first" || TabNo.ToLower() != "last")
+            {
+                Assert.Fail("Failed in swithcing the Tab/Window with provided Window Name " + TabNo);
+            }
+        }
+
+        /// <summary>
+        /// General MD1 Login function that will go to MD1 home page
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        public void MD1login(string username, string password)
+        {
+            input("md1un_id", username);
+            input("md1pwd_id", password);
+            click("md1login_id");
+            Console.WriteLine("Waiting till the MD1 Home page is loaded ");
+            waitForElement("md1findclient_id");
+            Assert.IsTrue(MDlocator("md1findclient_id").Displayed.Equals(true));
+            Console.WriteLine("Login is Successful as LastLogin is displayed.");
+        }
+
+        /// <summary>
+        /// Navigate to MD1 with provided environment
+        /// </summary>
+        public void NavToMD1()
+        {
+            openBrowser("bType");
+            Console.WriteLine("Navigating to MD1 ");
+            string urlKey = Environment.GetEnvironmentVariable("environment", EnvironmentVariableTarget.Process);
+            //string urlKey = "sprint";
+            switch (urlKey)
+            {
+                case "sprint":
+                    MDdriver.Url = "https://md1-sprint.mdm.ca";
+                    break;
+
+                case "15s":
+                    MDdriver.Url = "http://itinternal3.cmamdm.enterprise.corp";
+                    break;
+
+                case "staging":
+                    MDdriver.Url = "http://md1-sprint-staging.mdm.ca/";
+                    break;
+
+                case "gpr":
+                    MDdriver.Url = "http://10.75.1.57";
+                    break;
+
+                case "12s":
+                    MDdriver.Url = "http://itinternal";
+                    break;
+
+                case "14s":
+                    MDdriver.Url = "http://itinternal2";
+                    break;
+
+                case "prod":
+                    MDdriver.Url = "http://md1";
+                    break;
+
+                default:
+                    MDdriver.Url = "http://itinternal3.cmamdm.enterprise.corp";
+                    break;
+            }
+            Console.WriteLine("Verify MD1 login page");
+            waitForElement("md1_id");
+        }
+
+        /// <summary>
+        /// Scroll the browser to visible 
+        /// </summary>
+        /// <param name="locatorKey"></param>
+        /// <param name="testdata"></param>
+        public void scroll(string locatorKey)
+        {
+            Console.WriteLine("Scrolling to " + ConfigurationManager.AppSettings[locatorKey]);
+            //test.Log(Status.Info, "Clicking the " + ConfigurationManager.AppSettings[locatorKey]);
+            IWebElement MDelement = MDlocator(locatorKey);
+            IJavaScriptExecutor js = (IJavaScriptExecutor)MDdriver;
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", MDelement);
         }
     }
 }

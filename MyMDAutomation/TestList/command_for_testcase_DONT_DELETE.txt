@@ -1,0 +1,5 @@
+Open Package Manager Console:
+
+Run the below command 
+
+Pickle-Features -FeatureDirectory .\MyMDAutomation\Features -OutputDirectory .\MyMDAutomation\TestList -SystemUnderTestName "MyMD & MD1 Test Cases" -DocumentationFormat dhtml

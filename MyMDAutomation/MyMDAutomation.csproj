@@ -85,6 +85,7 @@
       <HintPath>..\packages\System.Configuration.ConfigurationManager.4.7.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
@@ -149,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Features\MD1FC.feature" />
+    <None Include="Features\MD1TC.feature" />
+    <None Include="Features\MyMDlinks.feature" />
     <None Include="Features\MyMDlogin.feature" />
     <None Include="Features\OverviewPage.feature" />
     <None Include="Features\SSO.feature" />
@@ -168,6 +172,9 @@
     <Compile Include="utils\Hooks.cs" />
     <Compile Include="utils\MyMDconnector.cs" />
     <Compile Include="utils\TableExtension.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestList\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

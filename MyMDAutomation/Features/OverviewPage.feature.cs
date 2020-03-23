@@ -84,17 +84,17 @@ namespace MyMDAutomation.Features
         {
 #line 7
 #line hidden
-            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table1.AddRow(new string[] {
+            table4.AddRow(new string[] {
                         "Username",
                         "mdpic99397@md.ca"});
-            table1.AddRow(new string[] {
+            table4.AddRow(new string[] {
                         "Password",
                         "password99"});
 #line 8
-  testRunner.Given("I login to MyMD app with provided Credentials", ((string)(null)), table1, "Given ");
+  testRunner.Given("I login to MyMD app with provided Credentials", ((string)(null)), table4, "Given ");
 #line hidden
 #line 13
   testRunner.Then("login should be successful", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -327,6 +327,92 @@ this.FeatureBackground();
 #line hidden
 #line 92
   testRunner.Then("I logout from MyMD app", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Networth, Documents Modal on Overview page")]
+        [NUnit.Framework.CategoryAttribute("smokeTest")]
+        public virtual void NetworthDocumentsModalOnOverviewPage()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "smokeTest"};
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Networth, Documents Modal on Overview page", "\t\tAs a user when I login  \r\n\t\tI want to view My Net Worth & Documents Modal on my" +
+                    " overview page", new string[] {
+                        "smokeTest"});
+#line 96
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 7
+this.FeatureBackground();
+#line hidden
+#line 100
+  testRunner.Then("I verify the element \"doc_linktext\" is present", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 102
+   testRunner.And("I verify the element \"netw_id\" is present", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Quotes, PWC section on Overview page")]
+        [NUnit.Framework.CategoryAttribute("smokeTest")]
+        public virtual void QuotesPWCSectionOnOverviewPage()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "smokeTest"};
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Quotes, PWC section on Overview page", "\t\tAs a user when I login  \r\n\t\tI want to view My PWC & Quotes section on my overvi" +
+                    "ew page", new string[] {
+                        "smokeTest"});
+#line 106
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 7
+this.FeatureBackground();
+#line hidden
+#line 110
+  testRunner.Then("I verify the element \"quotesr_id\" is present", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 112
+   testRunner.And("I verify the element \"pwc_id\" is present", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

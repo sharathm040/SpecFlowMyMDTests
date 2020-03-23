@@ -17,6 +17,7 @@ namespace MyMDAutomation.StepsDefinition
             this.MD = MD;
         }
 
+        [Then(@"I check if pvq's are available \""(.*)""")]
         [When(@"I check if pvq's are available \""(.*)""")]
         public void ifPvqS(string locator)
         {
@@ -25,13 +26,14 @@ namespace MyMDAutomation.StepsDefinition
             {
                 MD.waitForElement(locator);
                 MD.click(locator);
-            } catch
+            }
+            catch
             {
                 Console.WriteLine("PVQ's are not available for this user ");
             }
         }
 
-
+        [Then(@"I wait for either \""(.*)"" or \""(.*)"" element to be visible")]
         [When(@"I wait for either \""(.*)"" or \""(.*)"" element to be visible")]
         public void IWaitFor(string externalweb, string mymdoverview)
         {

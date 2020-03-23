@@ -91,3 +91,22 @@ Scenario: Peer Comparsion View/Update Details
 		        
 		Then I logout from MyMD app
 
+@smokeTest
+#-----------------------------------------------------------------------------------
+Scenario: Networth, Documents Modal on Overview page
+		As a user when I login  
+		I want to view My Net Worth & Documents Modal on my overview page
+		
+		Then I verify the element "doc_linktext" is present
+
+			And I verify the element "netw_id" is present
+
+@smokeTest
+#-----------------------------------------------------------------------------------
+Scenario: Quotes, PWC section on Overview page
+		As a user when I login  
+		I want to view My PWC & Quotes section on my overview page
+		
+		Then I verify the element "quotesr_id" is present
+
+			And I verify the element "pwc_id" is present
